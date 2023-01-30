@@ -1,7 +1,11 @@
+import os
 from flask import Flask,render_template,request, flash,redirect,url_for
-
+from data.db_session import create_tables
 
 app = Flask(__name__)
+
+
+
 
 
 app.config['SECRET_KEY'] = 'mykey'
@@ -38,4 +42,5 @@ def page_not_found(e):
 
 
 if __name__ == '__main__':
+    create_tables()
     app.run(debug=True) # Turn off debug= true to producton deploy
