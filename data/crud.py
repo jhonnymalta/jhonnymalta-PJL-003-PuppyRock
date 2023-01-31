@@ -21,3 +21,8 @@ def get_all_tutors() -> List[Tutor]:
     with create_session() as session:
         tutor_list: List[Tutor] = session.query(Tutor)
     return tutor_list
+
+def get_tutor_by_id(id: int) -> Tutor:
+    with create_session() as session:
+        tutor: Tutor = session.query(Tutor).filter(Tutor.id == id).first()
+    return tutor

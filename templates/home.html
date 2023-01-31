@@ -11,6 +11,7 @@
         <img src="" alt="Pic Profile" />
       </div>
       <p>{{tutor.name}}</p>
+      <a href="{{url_for('profile',id=tutor.id)}}">Ver Perfil</a>
     </div>
     {% endfor %}
   </div>

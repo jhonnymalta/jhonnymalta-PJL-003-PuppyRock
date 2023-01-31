@@ -55,6 +55,13 @@ def home():
     lista = get_all_tutors()
     return render_template('home.html',lista=lista)
 
+@app.route('/profile/<id>')
+def profile(id):
+    from data.crud import get_tutor_by_id
+    tutor: Tutor = get_tutor_by_id(id)
+    return render_template('profile.html',tutor=tutor)
+
+
 @app.errorhandler(404)
 def page_not_found(e):    
     return render_template('404.html'), 404
