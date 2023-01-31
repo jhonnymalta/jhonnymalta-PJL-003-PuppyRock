@@ -1,0 +1,18 @@
+{% extends 'basic.html'%} {% block content %}
+
+<div class="container">
+  <h1 class="text-center mt-5">Conheça nossos tutores!</h1>
+</div>
+<div class="container">
+  <div class="row">
+    {% for tutor in lista %}
+    <div class="card col-4">
+      <div class="bg-black">
+        <img src="" alt="Pic Profile" />
+      </div>
+      <p>{{tutor.name}}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

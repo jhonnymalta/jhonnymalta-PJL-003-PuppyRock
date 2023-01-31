@@ -39,7 +39,8 @@ def thankyou():
             email = email,
             city = city
         )
-        insert_tutor(new_tutor)
+        tutor_created = insert_tutor(new_tutor)
+        print(tutor_created)
         return render_template('thankyou.html',username=username)
     else:
         flash('The username must contain a cappital letter and a number')
@@ -47,11 +48,18 @@ def thankyou():
     
 
 
+
+@app.route('/home')
+def home():
+    from data.crud import get_all_tutors
+    lista = get_all_tutors()
+    return render_template('home.html',lista=lista)
+
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(e):    
     return render_template('404.html'), 404
 
 
 if __name__ == '__main__':
-    create_tables()
+    #create_tables()
     app.run(debug=True) # Turn off debug= true to producton deploy
