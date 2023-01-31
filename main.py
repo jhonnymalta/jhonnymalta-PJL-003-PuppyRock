@@ -2,6 +2,8 @@ import os
 from flask import Flask,render_template,request, flash,redirect,url_for
 from data.db_session import create_tables
 
+from models.Tutor import Tutor
+
 app = Flask(__name__)
 
 
@@ -20,8 +22,10 @@ def signup():
 
 @app.route("/thankyou")
 def thankyou():
+    from data.crud import insert_tutor
     username = request.args.get('username')
     email = request.args.get('email')
+    city = request.args.get('city')
 
     lower_letter = any(c.islower() for c in username)
     upper_letter = any(c.isupper() for c in username)
@@ -29,6 +33,13 @@ def thankyou():
 
     is_valid_username = lower_letter and upper_letter and num
     if is_valid_username:
+
+        new_tutor = Tutor(
+            name = username,
+            email = email,
+            city = city
+        )
+        insert_tutor(new_tutor)
         return render_template('thankyou.html',username=username)
     else:
         flash('The username must contain a cappital letter and a number')
