@@ -14,7 +14,7 @@ app.config['SECRET_KEY'] = 'mykey'
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("login.html")
 
 @app.route('/signup')
 def signup():
@@ -51,6 +51,10 @@ def thankyou():
 
 @app.route('/home')
 def home():
+
+
+
+
     from data.crud import get_all_tutors
     lista = get_all_tutors()
     return render_template('home.html',lista=lista)
@@ -67,6 +71,11 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
 if __name__ == '__main__':
-    #create_tables()
+    create_tables()
     app.run(debug=True) # Turn off debug= true to producton deploy
