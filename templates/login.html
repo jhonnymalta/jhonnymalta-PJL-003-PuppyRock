@@ -17,20 +17,26 @@
     <div class="container">
       <div class="row justify-content-md-center mt-4">
         <div class="col-4 card p-4 mt-5">
-          <form href="{{url_for('home')}}">
+          <form action="{{url_for('authentication')}}" class="col-4">
             <div class="mb-3 form-group">
               <label for="username" class="form-label">User Name</label>
               <input type="text" name="username" class="form-control" />
             </div>
             <div class="mb-3 form-group">
-              <label for="pass" class="form-label">Email</label>
-              <input type="password" name="pass" class="form-control" />
+              <label for="password" class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" />
             </div>
             <div>
               <button type="submit" class="btn btn-primary">Login</button>
             </div>
           </form>
         </div>
+      </div>
+      <div class="row justify-content-md-center mt-4">
+        <p class="col-4">
+          don't have you a account? register
+          <a href="{{url_for('signup')}}">here</a>
+        </p>
       </div>
     </div>
     <!--bootstrap-->

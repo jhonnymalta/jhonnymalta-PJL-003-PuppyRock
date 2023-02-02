@@ -4,6 +4,8 @@ from data.db_session import create_tables
 
 from models.Tutor import Tutor
 
+from services.PassHashing import hashing_pass
+
 app = Flask(__name__)
 
 
@@ -22,10 +24,15 @@ def signup():
 
 @app.route("/thankyou")
 def thankyou():
+
     from data.crud import insert_tutor
     username = request.args.get('username')
     email = request.args.get('email')
     city = request.args.get('city')
+    password: str = request.args.get('password')
+    print(password)
+    password_to_save:str = hashing_pass(password)
+    print(password_to_save)
 
     lower_letter = any(c.islower() for c in username)
     upper_letter = any(c.isupper() for c in username)
@@ -37,7 +44,8 @@ def thankyou():
         new_tutor = Tutor(
             name = username,
             email = email,
-            city = city
+            city = city,
+            password = password_to_save
         )
         tutor_created = insert_tutor(new_tutor)
         print(tutor_created)
@@ -49,16 +57,13 @@ def thankyou():
 
 
 
-@app.route('/home')
-def home():
-
-
-
-
+@app.route('/tutor')
+def tutor():
     from data.crud import get_all_tutors
     lista = get_all_tutors()
-    return render_template('home.html',lista=lista)
-
+    return render_template('tutor.html',lista=lista)
+   
+    
 @app.route('/profile/<id>')
 def profile(id):
     from data.crud import get_tutor_by_id
@@ -72,10 +77,20 @@ def page_not_found(e):
 
 
 @app.route('/login')
-def login():
+def login():    
     return render_template('login.html')
 
+@app.route('/authentication')
+def authentication():
+    username = request.args.get('username')
+    password = request.args.get('password')
 
+    from data.crud import authentication_user
+    permission = authentication_user(username,password)
+    if permission:
+        return redirect(url_for('tutor'))
+
+    return redirect(url_for('login'))
 if __name__ == '__main__':
-    create_tables()
+    #create_tables()
     app.run(debug=True) # Turn off debug= true to producton deploy
