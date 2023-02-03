@@ -1,3 +1,3 @@
 from models.Puppy import Puppy
-from models.Tutor import Tutor
+from models.User import User
 

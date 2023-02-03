@@ -1,10 +1,15 @@
 import os
-from flask import Flask,render_template,request, flash,redirect,url_for
+from flask import Flask,render_template,request, flash,redirect,url_for,abort
+
+
+from flask_login import login_required,login_user,LoginManager
 from data.db_session import create_tables
 
-from models.Tutor import Tutor
+from models.User import User
 
 from services.PassHashing import hashing_pass
+
+login_manager = LoginManager()
 
 app = Flask(__name__)
 
@@ -41,8 +46,8 @@ def thankyou():
     is_valid_username = lower_letter and upper_letter and num
     if is_valid_username:
 
-        new_tutor = Tutor(
-            name = username,
+        new_tutor = User(
+            username = username,
             email = email,
             city = city,
             password = password_to_save
@@ -58,6 +63,7 @@ def thankyou():
 
 
 @app.route('/tutor')
+@login_required
 def tutor():
     from data.crud import get_all_tutors
     lista = get_all_tutors()
@@ -67,7 +73,7 @@ def tutor():
 @app.route('/profile/<id>')
 def profile(id):
     from data.crud import get_tutor_by_id
-    tutor: Tutor = get_tutor_by_id(id)
+    tutor: User = get_tutor_by_id(id)
     return render_template('profile.html',tutor=tutor)
 
 
@@ -76,21 +82,39 @@ def page_not_found(e):
     return render_template('404.html'), 404
 
 
-@app.route('/login')
-def login():    
-    return render_template('login.html')
-
-@app.route('/authentication')
-def authentication():
+@app.route('/login',methods=['GET','POST'])
+def login():  
+    
     username = request.args.get('username')
-    password = request.args.get('password')
+    password = request.args.get('password') 
 
     from data.crud import authentication_user
-    permission = authentication_user(username,password)
-    if permission:
-        return redirect(url_for('tutor'))
+    user = authentication_user(username,password) 
+    print(user)
+    if user is not None:
+        login_user(user)
+        flash('Logged in successfully.')
 
-    return redirect(url_for('login'))
+        next = request.args.get('next')
+        # if not is_safe_url(next):
+        #     return redirect(url_for('login'))
+
+        return redirect(next or url_for('tutor'))
+    return render_template('login.html')
+
+
+    
+    
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    from data.crud import get_tutor_by_id
+    return get_tutor_by_id(user_id)
+
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 if __name__ == '__main__':
     #create_tables()
+    
     app.run(debug=True) # Turn off debug= true to producton deploy
