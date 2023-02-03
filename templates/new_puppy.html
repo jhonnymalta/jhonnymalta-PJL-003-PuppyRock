@@ -1,0 +1,33 @@
+{% extends 'basic.html' %} {% block content %}
+
+<div class="container">
+  <div class="row justify-content-md-center mt-4">
+    <form
+      method="post"
+      action="{{url_for('new_puppy')}}"
+      class="col-4 card m-4 p-4"
+    >
+      <div class="mb-3 form-group">
+        <label for="puppy_name" class="form-label">Puppy Name</label>
+        <input type="text" name="puppy_name" class="form-control" />
+      </div>
+      <div class="mb-3 form-group">
+        <label for="age" class="form-label">Age</label>
+        <input type="text" name="age" class="form-control" />
+      </div>
+      <div class="mb-3 form-group">
+        <label for="city" class="form-label">City</label>
+        <input type="text" name="city" class="form-control" />
+      </div>
+      <div class="mb-3 form-group">
+        <label for="url_image" class="form-label">Url Image</label>
+        <input type="text" name="url_image" class="form-control" />
+      </div>
+      <div>
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{%extends 'basic.html'%} {% block content%}
+<div class="container">
+  <div class="mt-5 mb-5">
+    <h1 class="text-center">Our Beautiful Puppies</h1>
+  </div>
+  <div class="row">
+    {% for puppy in list%}
+    <div class="card col-3 mx-4" style="width: 18rem">
+      <img
+        class="card-img-top"
+        src="{{puppy.url_image}}"
+        alt="Card image cap"
+        height="300"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{puppy.puppy_name}}</h5>
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{%endblock%}

@@ -6,6 +6,7 @@ from flask_login import login_required,login_user,LoginManager
 from data.db_session import create_tables
 
 from models.User import User
+from models.Puppy import Puppy
 
 from services.PassHashing import hashing_pass
 
@@ -76,6 +77,33 @@ def profile(id):
     tutor: User = get_tutor_by_id(id)
     return render_template('profile.html',tutor=tutor)
 
+@app.route('/new_puppy',methods=['POST','GET'])
+@login_required
+def new_puppy():
+    if request.method == 'POST':
+        puppy_name = request.form['puppy_name']
+        age = request.form['age']
+        city = request.form['city']
+        url_image = request.form['url_image']
+
+        puppy : Puppy = Puppy(
+            puppy_name = puppy_name,
+            age = int(age),
+            city = city,
+            url_image = url_image
+        )
+        from data.crud import create_puppy
+        create_puppy(puppy)
+        return redirect(url_for('puppies'))
+    else:
+        return render_template('new_puppy.html')
+
+@app.route('/puppies')
+@login_required
+def puppies():
+    from data.crud import get_all_puppies
+    list = get_all_puppies()
+    return render_template('puppies.html',list=list)
 
 @app.errorhandler(404)
 def page_not_found(e):    
@@ -93,7 +121,7 @@ def login():
     print(user)
     if user is not None:
         login_user(user)
-        flash('Logged in successfully.')
+        
 
         next = request.args.get('next')
         # if not is_safe_url(next):
